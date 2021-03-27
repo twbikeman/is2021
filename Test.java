@@ -33,6 +33,13 @@ class Test {
 	public static final int BIT8_10 = 1 << 2;
 	public static final int BIT9_10 = 1 << 1;
 	public static final int BIT10_10 = 1;
+
+
+
+	public static final int BIT1_4 = 1 << 3;
+	public static final int BIT2_4 = 1 << 2;
+	public static final int BIT3_4 = 1 << 1;
+	public static final int BIT4_4 = 1;
 	
 
 
@@ -64,9 +71,8 @@ class Test {
 	}
 
 	public void keyGen(char k, char[] key) {
-		int[]  ip = {BIT2, BIT6, BIT3, BIT1, BIT4, BIT8, BIT5,BIT7};
 		int[] p10 = {BIT3_10, BIT5_10, BIT2_10, BIT7_10, BIT4_10, BIT10_10, BIT1_10, BIT9_10, BIT8_10, BIT6_10};
-		int[] l4_8 = {BIT1, BIT2, BIT3, BIT4};
+	 	int[] l4_8 = {BIT1, BIT2, BIT3, BIT4};
 		int[] r4_8 = {BIT5, BIT6, BIT7, BIT8};
 		int[] l5_10 = {BIT1_10, BIT2_10, BIT3_10, BIT4_10, BIT5_10};
 		int[] r5_10 = {BIT6_10, BIT7_10, BIT8_10, BIT9_10, BIT10_10};
@@ -82,9 +88,58 @@ class Test {
 		char k2 = permute(merge(k2_l, k2_r, 5), p8);
 		key[0] = k1;
 		key[1] = k2;
+	}
+
+	public char encrypt(char p, char[] key) {
+		int[]  ip = {BIT2, BIT6, BIT3, BIT1, BIT4, BIT8, BIT5,BIT7};
+		int[] inv_ip = {BIT4, BIT1, BIT3, BIT5, BIT7, BIT2, BIT8, BIT6};
+		int[]  ep = {BIT4_4, BIT1_4, BIT2_4, BIT3_4, BIT2_4, BIT3_4, BIT4_4,BIT1_4};
+		int[] p4 = {BIT2_4, BIT4_4, BIT3_4, BIT1_4};
+		int[] row = {BIT1_4, BIT4_4};
+		int[] col = {BIT2_4, BIT3_4};
+	  	int[] l4_8 = {BIT1, BIT2, BIT3, BIT4};
+		int[] r4_8 = {BIT5, BIT6, BIT7, BIT8};
+		int[] sw = {BIT5, BIT6, BIT7, BIT8, BIT1, BIT2, BIT3, BIT4};
+		
+		int[][] s0 = {{1,0,3,2}, {3,2,1,0}, {0,2,1,3}, {3,1,3,2}};
+		int[][] s1 = {{0,1,2,3}, {2,0,1,3}, {3,0,1,0}, {2,1,0,3}};
 
 
+		
+		
+		char c = '\0';
+		
+		c = permute(p, ip);
+
+		char c_r = permute(c, r4_8);
+		char c_l = permute(c, l4_8);
+		char f = permute(c_r, ep);
+		f = (char)(f ^ key[0]);
+		char f0 = permute(f, l4_8);
+		f0 = (char)(s0[permute(f0, row)][permute(f0, col)]);
+		char f1 = permute(f, r4_8);
+		f1 = (char)(s1[permute(f1, row)][permute(f1, col)]);
+		char s = permute(merge(f0, f1, 2), p4);
+		c_l = (char)(s ^ c_l);
+		char sw1 = permute(merge(c_l, c_r, 4), sw);
 	
+
+
+		c_r = permute(sw1, r4_8);
+		c_l = permute(sw1, l4_8);
+		f = permute(c_r, ep);
+		f = (char)(f ^ key[1]);
+		f0 = permute(f, l4_8);
+		f0 = (char)(s0[permute(f0, row)][permute(f0, col)]);
+		f1 = permute(f, r4_8);
+		f1 = (char)(s1[permute(f1, row)][permute(f1, col)]);
+		s = permute(merge(f0, f1, 2), p4);
+		c_l = (char)(s ^ c_l);
+		c = permute(merge(c_l, c_r, 4), inv_ip);
+	
+		
+
+		return c;
 	}
 
 	
@@ -106,12 +161,18 @@ class Test {
 		t.expBin(k, 8);
 */
 		Test sdes = new Test();
-		char x = 0x031E;
+		char x = 0x0282;
 		char[] key = new char[2];
 		sdes.keyGen(x, key);
 
-		sdes.expBin(key[0],8);
-		sdes.expBin(key[1],8);
+//		sdes.expBin(key[0],8);
+//		sdes.expBin(key[1],8);
+		
+		
+		char p = 0x72;
+		char c = sdes.encrypt(p, key);
+		sdes.expBin(c, 8);
+
 	}
 
 }
