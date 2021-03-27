@@ -1,5 +1,28 @@
 class SDES {
-	public char p;
+	
+	
+	public static final int BIT1 = 1 << 7;
+	public static final int BIT2 = 1 << 6;
+	public static final int BIT3 = 1 << 5;
+	public static final int BIT4 = 1 << 4;
+	public static final int BIT5 = 1 << 3;
+	public static final int BIT6 = 1 << 2;
+	public static final int BIT7 = 1 << 1;
+	public static final int BIT8 = 1;
+	public static final int BIT1_10 = 1 << 9;
+	public static final int BIT2_10 = 1 << 8;
+	public static final int BIT3_10 = 1 << 7;
+	public static final int BIT4_10 = 1 << 6;
+	public static final int BIT5_10 = 1 << 5;
+	public static final int BIT6_10 = 1 << 4;
+	public static final int BIT7_10 = 1 << 3;
+	public static final int BIT8_10 = 1 << 2;
+	public static final int BIT9_10 = 1 << 1;
+	public static final int BIT10_10 = 1;
+	public static final int BIT1_4 = 1 << 3;
+	public static final int BIT2_4 = 1 << 2;
+	public static final int BIT3_4 = 1 << 1;
+	public static final int BIT4_4 = 1;
 	
 	public void expBin(char input, int num) {
 		for (int i = 1 << (num -1); i >= 1; i /= 2) {
@@ -11,37 +34,6 @@ class SDES {
 		}
 		System.out.print('\n');
 	}
-
-
-	
-	public static final int BIT1 = 1 << 7;
-	public static final int BIT2 = 1 << 6;
-	public static final int BIT3 = 1 << 5;
-	public static final int BIT4 = 1 << 4;
-	public static final int BIT5 = 1 << 3;
-	public static final int BIT6 = 1 << 2;
-	public static final int BIT7 = 1 << 1;
-	public static final int BIT8 = 1;
-
-	public static final int BIT1_10 = 1 << 9;
-	public static final int BIT2_10 = 1 << 8;
-	public static final int BIT3_10 = 1 << 7;
-	public static final int BIT4_10 = 1 << 6;
-	public static final int BIT5_10 = 1 << 5;
-	public static final int BIT6_10 = 1 << 4;
-	public static final int BIT7_10 = 1 << 3;
-	public static final int BIT8_10 = 1 << 2;
-	public static final int BIT9_10 = 1 << 1;
-	public static final int BIT10_10 = 1;
-
-
-
-	public static final int BIT1_4 = 1 << 3;
-	public static final int BIT2_4 = 1 << 2;
-	public static final int BIT3_4 = 1 << 1;
-	public static final int BIT4_4 = 1;
-	
-
 
 
 	public char permute(char input, int[] index) {
@@ -100,54 +92,12 @@ class SDES {
 	  	int[] l4_8 = {BIT1, BIT2, BIT3, BIT4};
 		int[] r4_8 = {BIT5, BIT6, BIT7, BIT8};
 		int[] sw = {BIT5, BIT6, BIT7, BIT8, BIT1, BIT2, BIT3, BIT4};
-		
 		int[][] s0 = {{1,0,3,2}, {3,2,1,0}, {0,2,1,3}, {3,1,3,2}};
 		int[][] s1 = {{0,1,2,3}, {2,0,1,3}, {3,0,1,0}, {2,1,0,3}};
-
-
-		
-		
-		char c = '\0';
-		
-		c = permute(p, ip);
-
-
-/*
-		char c_r = permute(c, r4_8);
-		char c_l = permute(c, l4_8);
-		char f = permute(c_r, ep);
-		f = (char)(f ^ key[0]);
-		char f0 = permute(f, l4_8);
-		f0 = (char)(s0[permute(f0, row)][permute(f0, col)]);
-		char f1 = permute(f, r4_8);
-		f1 = (char)(s1[permute(f1, row)][permute(f1, col)]);
-		char s = permute(merge(f0, f1, 2), p4);
-		c_l = (char)(s ^ c_l);
-
-		char sw1 = permute(merge(c_l, c_r, 4), sw);
-	
-*/
-
+		char c = permute(p, ip);
 		c = fk(c, key[0]);
 		c = permute(c, sw);
 		c = fk(c, key[1]);
-		c = permute(c, inv_ip);
-
-/*
-		c_r = permute(sw1, r4_8);
-		c_l = permute(sw1, l4_8);
-		f = permute(c_r, ep);
-		f = (char)(f ^ key[1]);
-		f0 = permute(f, l4_8);
-		f0 = (char)(s0[permute(f0, row)][permute(f0, col)]);
-		f1 = permute(f, r4_8);
-		f1 = (char)(s1[permute(f1, row)][permute(f1, col)]);
-		s = permute(merge(f0, f1, 2), p4);
-		c_l = (char)(s ^ c_l);
-		c = permute(merge(c_l, c_r, 4), inv_ip);
-*/	
-		
-
 		return c;
 	}
 
@@ -196,20 +146,15 @@ class SDES {
 	public static void main(String[] argv) {
 		SDES sdes = new SDES();
 		char x = 0x0282;
-		
-		
 		System.out.println("key:");
 		sdes.expBin(x, 10);
 		char[] key = new char[2];
 		sdes.keyGen(x, key);
-		char p = 0x72;
-		System.out.println("plaintext:");
-		sdes.expBin(p, 8);
-		System.out.println("ciphertext")	
-		char c = sdes.encrypt(p, key);		
+		char c = 0x46;
+		System.out.println("ciphertext");	
 		sdes.expBin(c, 8);
 		System.out.println("plaintext:");
-		p = sdes.decrypt(c, key);
+		char p = sdes.decrypt(c, key);
 		sdes.expBin(p, 8);
 	}
 
